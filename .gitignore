@@ -20,6 +20,8 @@ dist-ssr
 # Lock files (if using pnpm)
 pnpm-lock.yaml
 
+README.md
+
 # NPM config
 .npmrc
 
