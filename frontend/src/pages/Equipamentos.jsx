@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'; 
-import { equipamentoService } from '../services/api'; 
+import React, { useState, useEffect } from 'react';  
  
 export default function Equipamentos() { 
     const [equipamentos, setEquipamentos] = useState([]); 
