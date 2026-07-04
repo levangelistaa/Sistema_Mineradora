@@ -55,6 +55,26 @@ body {
   box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
+.sidebar-header {
+  text-align: center;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.sidebar-logo {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.sidebar-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
 .profile-pic-placeholder {
   width: 120px;
   height: 120px;
