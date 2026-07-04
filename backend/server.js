@@ -13,12 +13,8 @@ app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
 
-app.get('/users', (req,res) => {
+app.get('/users', (req, res) => {
     res.send('Usuário encontrado com sucesso!');
 });
 
-const PORT = process.env.PORT || 3000
-
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`)
-})
+export default app;
