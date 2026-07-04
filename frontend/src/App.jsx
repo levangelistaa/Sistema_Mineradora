@@ -1,7 +1,7 @@
 import React, { useState } from 'react'; 
 import Menu from './components/Menu'; 
-import Inicio from './pages/Inicio'; 
-import Equipamentos from './pages/Equipamentos'; 
+import Home from './pages/Home'; 
+import Equipaments from './pages/Equipaments'; 
  
 function App() { 
     const [pagina, setPagina] = useState('inicio'); 

@@ -1,18 +1,18 @@
-import EquipamentService from '../Services/EquipamentService.js'
+import ServiceWorkService from '../Services/ServiceWorkService.js'
 
-class EquipamentController {
+class ServiceWorkController {
 
     async list(req, res) {
         try {
-            const equipamentos = await EquipamentService.list()
+            const servicos = await ServiceWorkService.list()
 
-            return res.json(equipamentos)
+            return res.json(servicos)
 
         } catch (error) {
             console.error(error)
 
             return res.status(500).json({
-                mensagem: "Erro ao buscar equipamentos",
+                mensagem: "Erro ao buscar serviços",
                 erro: error.message
             })
         }
@@ -22,15 +22,15 @@ class EquipamentController {
         try {
             const { id } = req.params
 
-            const equipamento = await EquipamentService.findById(id)
+            const servico = await ServiceWorkService.findById(id)
 
-            return res.json(equipamento)
+            return res.json(servico)
 
         } catch (error) {
             console.error(error)
 
             return res.status(500).json({
-                mensagem: "Erro ao buscar equipamento por ID",
+                mensagem: "Erro ao buscar serviço por ID",
                 erro: error.message
             })
         }
@@ -38,24 +38,25 @@ class EquipamentController {
 
     async create(req, res) {
         try {
-            const { nome, setor } = req.body
+            const { nome } = req.body
 
-            const equipamento = await EquipamentService.create({ name_equipament: nome, sector: setor })
+            const servico = await ServiceWorkService.create({
+                name_service: nome
+            })
 
-            return res.status(201).json(equipamento)
+            return res.status(201).json(servico)
 
         } catch (error) {
             console.error(error)
 
-            // Validação de nome retorna status 400 (Bad Request)
-            if (error.message.includes('inválido')) {
+            if (error.message.includes('inválido') || error.message.includes('obrigatório')) {
                 return res.status(400).json({
                     mensagem: error.message
                 })
             }
 
             return res.status(500).json({
-                mensagem: "Erro ao criar equipamento",
+                mensagem: "Erro ao criar serviço",
                 erro: error.message
             })
         }
@@ -64,23 +65,25 @@ class EquipamentController {
     async update(req, res) {
         try {
             const { id } = req.params
-            const { nome, setor } = req.body
+            const { nome } = req.body
 
-            const equipamento = await EquipamentService.update(id, { nome, setor })
+            const servico = await ServiceWorkService.update(id, {
+                name_service: nome
+            })
 
-            return res.json(equipamento)
+            return res.json(servico)
 
         } catch (error) {
             console.error(error)
 
-            if (error.message.includes('inválido')) {
+            if (error.message.includes('inválido') || error.message.includes('obrigatório')) {
                 return res.status(400).json({
                     mensagem: error.message
                 })
             }
 
             return res.status(500).json({
-                mensagem: "Erro ao atualizar equipamento",
+                mensagem: "Erro ao atualizar serviço",
                 erro: error.message
             })
         }
@@ -90,7 +93,7 @@ class EquipamentController {
         try {
             const { id } = req.params
 
-            await EquipamentService.delete(id)
+            await ServiceWorkService.delete(id)
 
             return res.sendStatus(204)
 
@@ -98,7 +101,7 @@ class EquipamentController {
             console.error(error)
 
             return res.status(500).json({
-                mensagem: "Erro ao deletar equipamento",
+                mensagem: "Erro ao deletar serviço",
                 erro: error.message
             })
         }
@@ -106,4 +109,4 @@ class EquipamentController {
 
 }
 
-export default new EquipamentController()
+export default new ServiceWorkController()

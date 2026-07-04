@@ -1,6 +1,6 @@
 import supabase from '../config/supabaseClient.js'
 
-class EquipamentService {
+class CityService {
 
     // Valida que o nome contém apenas letras e espaços (sem números)
     _validarNome(nome) {
@@ -11,16 +11,16 @@ class EquipamentService {
         const apenasLetras = /^[a-zA-ZÀ-ÿ\s]+$/
 
         if (!apenasLetras.test(nome.trim())) {
-            throw new Error('Nome inválido: o nome do equipamento não pode conter números ou caracteres especiais.')
+            throw new Error('Nome inválido: o nome da cidade não pode conter números ou caracteres especiais.')
         }
     }
 
-    async create(equipamento) {
-        this._validarNome(equipamento.name_equipament)
+    async create(cidade) {
+        this._validarNome(cidade.name_city)
 
         const { data, error } = await supabase
-            .from('equipaments')
-            .insert(equipamento)
+            .from('cities')
+            .insert(cidade)
             .select()
             .single()
 
@@ -31,7 +31,7 @@ class EquipamentService {
 
     async list() {
         const { data, error } = await supabase
-            .from('equipaments')
+            .from('cities')
             .select('*')
 
         if (error) throw error
@@ -41,9 +41,9 @@ class EquipamentService {
 
     async findById(id) {
         const { data, error } = await supabase
-            .from('equipaments')
+            .from('cities')
             .select('*')
-            .eq('id_equipament', id)
+            .eq('id_city', id)
             .single()
 
         if (error) throw error
@@ -51,15 +51,15 @@ class EquipamentService {
         return data
     }
 
-    async update(id, equipamento) {
-        if (equipamento.name_equipament !== undefined) {
-            this._validarNome(equipamento.name_equipament)
+    async update(id, cidade) {
+        if (cidade.name_city !== undefined) {
+            this._validarNome(cidade.name_city)
         }
 
         const { data, error } = await supabase
-            .from('equipaments')
-            .update(equipamento)
-            .eq('id_equipament', id)
+            .from('cities')
+            .update(cidade)
+            .eq('id_city', id)
             .select()
             .single()
 
@@ -70,13 +70,13 @@ class EquipamentService {
 
     async delete(id) {
         const { error } = await supabase
-            .from('equipaments')
+            .from('cities')
             .delete()
-            .eq('id_equipament', id)
+            .eq('id_city', id)
 
         if (error) throw error
     }
 
 }
 
-export default new EquipamentService()
+export default new CityService()
