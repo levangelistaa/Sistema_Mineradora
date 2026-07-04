@@ -3,33 +3,33 @@ import ActionCard from '../components/ActionCard';
 import { PlusCircle, List, Search, Edit, Trash2, ArrowLeft } from 'lucide-react';
 import api from '../api';
 
-const Equipaments = () => {
+const Workers = () => {
   const [activeTab, setActiveTab] = useState('list');
-  const [equipaments, setEquipaments] = useState([]);
-  const [formData, setFormData] = useState({ id: '', nome: '', setor: '' });
-  const [searchId, setSearchId] = useState('');
+  const [workers, setWorkers] = useState([]);
+  const [formData, setFormData] = useState({ nome: '', cargo: '', cpf: '', setor: '' });
+  const [searchCpf, setSearchCpf] = useState('');
   const [message, setMessage] = useState('');
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const fetchEquipaments = async () => {
+  const fetchWorkers = async () => {
     try {
-      const response = await api.get('/equipaments');
-      setEquipaments(response.data);
+      const response = await api.get('/workers');
+      setWorkers(response.data);
       setMessage('');
     } catch (error) {
-      setMessage('Erro ao buscar equipamentos');
+      setMessage('Erro ao buscar funcionários');
     }
   };
 
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/equipaments', { nome: formData.nome, setor: formData.setor });
-      setMessage('Equipamento criado com sucesso!');
-      setFormData({ id: '', nome: '', setor: '' });
+      await api.post('/workers', formData);
+      setMessage('Funcionário criado com sucesso!');
+      setFormData({ nome: '', cargo: '', cpf: '', setor: '' });
     } catch (error) {
       setMessage(error.response?.data?.mensagem || 'Erro ao criar');
     }
@@ -38,23 +38,24 @@ const Equipaments = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.get(`/equipaments/${searchId}`);
-      setEquipaments([response.data]);
+      const response = await api.get(`/workers/${searchCpf}`);
+      setWorkers([response.data]);
       setMessage('');
     } catch (error) {
-      setMessage('Equipamento não encontrado');
-      setEquipaments([]);
+      setMessage('Funcionário não encontrado');
+      setWorkers([]);
     }
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/equipaments/${formData.id}`, {
+      await api.put(`/workers/${formData.cpf}`, {
         nome: formData.nome,
+        cargo: formData.cargo,
         setor: formData.setor
       });
-      setMessage('Equipamento atualizado com sucesso!');
+      setMessage('Funcionário atualizado com sucesso!');
     } catch (error) {
       setMessage(error.response?.data?.mensagem || 'Erro ao atualizar');
     }
@@ -63,9 +64,9 @@ const Equipaments = () => {
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
-      await api.delete(`/equipaments/${searchId}`);
-      setMessage('Equipamento deletado com sucesso!');
-      setEquipaments([]);
+      await api.delete(`/workers/${searchCpf}`);
+      setMessage('Funcionário deletado com sucesso!');
+      setWorkers([]);
     } catch (error) {
       setMessage('Erro ao deletar');
     }
@@ -77,11 +78,20 @@ const Equipaments = () => {
         return (
           <form onSubmit={handleCreate}>
             <div className="form-header">
-              <h2>Criar Equipamento</h2>
+              <h2>Criar Funcionário</h2>
+              <h3>Preencha os dados abaixo</h3>
             </div>
             <div className="form-group">
-              <label>Nome do Equipamento</label>
+              <label>Nome</label>
               <input type="text" name="nome" value={formData.nome} onChange={handleInputChange} required />
+            </div>
+            <div className="form-group">
+              <label>CPF</label>
+              <input type="text" name="cpf" value={formData.cpf} onChange={handleInputChange} required />
+            </div>
+            <div className="form-group">
+              <label>Cargo</label>
+              <input type="text" name="cargo" value={formData.cargo} onChange={handleInputChange} required />
             </div>
             <div className="form-group">
               <label>Setor</label>
@@ -96,15 +106,15 @@ const Equipaments = () => {
         return (
           <div>
             <div className="form-header">
-              <h2>Lista de Equipamentos</h2>
+              <h2>Lista de Funcionários</h2>
             </div>
-            <button type="button" onClick={fetchEquipaments} className="btn btn-primary">Buscar Todos</button>
+            <button type="button" onClick={fetchWorkers} className="btn btn-primary">Buscar Todos</button>
             <div className="data-list">
-              {equipaments.map(e => (
-                <div key={e.id_equipament} className="data-item">
+              {workers.map(w => (
+                <div key={w.cpf} className="data-item">
                   <div>
-                    <strong>{e.name_equipament || e.nome}</strong>
-                    <p style={{ fontSize: '12px', color: '#666' }}>ID: {e.id_equipament} | Setor: {e.sector || e.setor}</p>
+                    <strong>{w.name_worker || w.nome}</strong> - {w.cargo}
+                    <p style={{ fontSize: '12px', color: '#666' }}>CPF: {w.cpf} | Setor: {w.sector || w.setor}</p>
                   </div>
                 </div>
               ))}
@@ -115,18 +125,18 @@ const Equipaments = () => {
         return (
           <div>
             <div className="form-header">
-              <h2>Buscar Equipamento</h2>
+              <h2>Buscar Funcionário</h2>
             </div>
             <form onSubmit={handleSearch} className="form-group" style={{ display: 'flex', gap: '10px' }}>
-              <input type="text" placeholder="Digite o ID" value={searchId} onChange={e => setSearchId(e.target.value)} required />
+              <input type="text" placeholder="Digite o CPF" value={searchCpf} onChange={e => setSearchCpf(e.target.value)} required />
               <button type="submit" className="btn btn-primary">Buscar</button>
             </form>
             <div className="data-list">
-              {equipaments.map(e => (
-                <div key={e.id_equipament} className="data-item">
+              {workers.map(w => (
+                <div key={w.cpf} className="data-item">
                   <div>
-                    <strong>{e.name_equipament || e.nome}</strong>
-                    <p style={{ fontSize: '12px', color: '#666' }}>ID: {e.id_equipament} | Setor: {e.sector || e.setor}</p>
+                    <strong>{w.name_worker || w.nome}</strong> - {w.cargo}
+                    <p style={{ fontSize: '12px', color: '#666' }}>CPF: {w.cpf} | Setor: {w.sector || w.setor}</p>
                   </div>
                 </div>
               ))}
@@ -137,15 +147,20 @@ const Equipaments = () => {
         return (
           <form onSubmit={handleUpdate}>
             <div className="form-header">
-              <h2>Atualizar Equipamento</h2>
+              <h2>Atualizar Funcionário</h2>
+              <h3>Preencha o CPF e os novos dados</h3>
             </div>
             <div className="form-group">
-              <label>ID do Equipamento</label>
-              <input type="text" name="id" value={formData.id} onChange={handleInputChange} required />
+              <label>CPF (Para identificar)</label>
+              <input type="text" name="cpf" value={formData.cpf} onChange={handleInputChange} required />
             </div>
             <div className="form-group">
               <label>Novo Nome</label>
               <input type="text" name="nome" value={formData.nome} onChange={handleInputChange} required />
+            </div>
+            <div className="form-group">
+              <label>Novo Cargo</label>
+              <input type="text" name="cargo" value={formData.cargo} onChange={handleInputChange} required />
             </div>
             <div className="form-group">
               <label>Novo Setor</label>
@@ -160,11 +175,11 @@ const Equipaments = () => {
         return (
           <form onSubmit={handleDelete}>
             <div className="form-header">
-              <h2>Deletar Equipamento</h2>
+              <h2>Deletar Funcionário</h2>
             </div>
             <div className="form-group">
-              <label>ID do Equipamento</label>
-              <input type="text" value={searchId} onChange={e => setSearchId(e.target.value)} required />
+              <label>CPF do Funcionário</label>
+              <input type="text" value={searchCpf} onChange={e => setSearchCpf(e.target.value)} required />
             </div>
             <div className="form-actions">
               <button type="submit" className="btn btn-danger">Deletar</button>
@@ -178,14 +193,17 @@ const Equipaments = () => {
 
   return (
     <div style={{ display: 'flex', gap: '24px', height: '100%' }}>
+      {/* Menu de Ações (Esquerda no painel de conteúdo) */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', flex: '0 0 250px' }}>
         <ActionCard title="Voltar para Início" icon={ArrowLeft} to="/" />
-        <ActionCard title="Buscar Todos" icon={List} active={activeTab === 'list'} onClick={() => { setActiveTab('list'); setMessage(''); setEquipaments([]); }} />
+        <ActionCard title="Buscar Todos" icon={List} active={activeTab === 'list'} onClick={() => { setActiveTab('list'); setMessage(''); setWorkers([]); }} />
         <ActionCard title="Criar" icon={PlusCircle} active={activeTab === 'create'} onClick={() => { setActiveTab('create'); setMessage(''); }} />
-        <ActionCard title="Buscar por ID" icon={Search} active={activeTab === 'search'} onClick={() => { setActiveTab('search'); setMessage(''); setEquipaments([]); }} />
+        <ActionCard title="Buscar por CPF" icon={Search} active={activeTab === 'search'} onClick={() => { setActiveTab('search'); setMessage(''); setWorkers([]); }} />
         <ActionCard title="Atualizar" icon={Edit} active={activeTab === 'update'} onClick={() => { setActiveTab('update'); setMessage(''); }} />
         <ActionCard title="Deletar" icon={Trash2} active={activeTab === 'delete'} onClick={() => { setActiveTab('delete'); setMessage(''); }} />
       </div>
+
+      {/* Formulário / Resultado (Direita no painel de conteúdo) */}
       <div className="content-panel" style={{ flex: 1 }}>
         {message && <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: '#f8d7da', color: '#721c24', borderRadius: '4px' }}>{message}</div>}
         {renderForm()}
@@ -194,4 +212,4 @@ const Equipaments = () => {
   );
 };
 
-export default Equipaments;
+export default Workers;

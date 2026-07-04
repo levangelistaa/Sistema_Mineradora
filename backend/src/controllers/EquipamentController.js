@@ -66,7 +66,7 @@ class EquipamentController {
             const { id } = req.params
             const { nome, setor } = req.body
 
-            const equipamento = await EquipamentService.update(id, { nome, setor })
+            const equipamento = await EquipamentService.update(id, { name_equipament: nome, sector: setor })
 
             return res.json(equipamento)
 

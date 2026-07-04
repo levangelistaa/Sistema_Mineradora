@@ -1,26 +1,26 @@
-import React, { useState } from 'react'; 
-import Menu from './components/Menu'; 
-import Home from './pages/Home'; 
-import Equipaments from './pages/Equipaments'; 
- 
-function App() { 
-    const [pagina, setPagina] = useState('inicio'); 
- 
-    return ( 
-        <div style={{ fontFamily: 'Arial', padding: '20px', maxWidth: '800px', margin: '0 auto' 
-}}> 
-            <Menu setPagina={setPagina} /> 
-            <hr /> 
-             
-            {pagina === 'inicio' && <Inicio />} 
-            {pagina === 'equipamentos' && <Equipamentos />} 
-{pagina === 'cidades' && <p> FAÇAM ESSA PÁGINA BASEADO NO QUE FIZEMOS 
-EM AULA E COMO ESTÁ INICIADO EM EQUIPAMENTOS</p>} 
-{pagina === 'funcionarios' && <p> FAÇAM ESSA PÁGINA BASEADO NO QUE 
-FIZEMOS EM AULA E COMO ESTÁ INICIADO EM EQUIPAMENTOS </p>} 
-{pagina === 'servicos' && <p> FAÇAM ESSA PÁGINA BASEADO NO QUE FIZEMOS 
-EM AULA E COMO ESTÁ INICIADO EM EQUIPAMENTOS </p>} 
-</div> 
-); 
-} 
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MainLayout from './layouts/MainLayout';
+import Home from './pages/Home';
+import Workers from './pages/Workers';
+import Cities from './pages/Cities';
+import ServicesPage from './pages/Services';
+import Equipaments from './pages/Equipaments';
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Home />} />
+          <Route path="funcionarios" element={<Workers />} />
+          <Route path="cidades" element={<Cities />} />
+          <Route path="servicos" element={<ServicesPage />} />
+          <Route path="equipamentos" element={<Equipaments />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
+}
+
 export default App;
