@@ -1,9 +1,11 @@
 import express from 'express'
+import cors from 'cors';
 import 'dotenv/config'
 import supabase from './src/config/supabaseClient.js'
 import publicRoutes from './src/routes/public.js'
 
 const app = express();
+app.use(cors());
 
 app.use(express.json())
 
